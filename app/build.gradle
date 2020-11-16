@@ -46,4 +46,5 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-location:11.0.2'
     implementation 'com.google.android.libraries.maps:maps:3.1.0-beta'
+
 }
