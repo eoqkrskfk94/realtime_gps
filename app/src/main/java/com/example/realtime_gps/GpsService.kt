@@ -19,10 +19,14 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.maps.model.LatLng
+import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.UnsupportedOperationException
 
 
 class GpsService : Service() {
+
+    private lateinit var fbFirestore: FirebaseFirestore
 
     private val locationCallBack: LocationCallback? = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
@@ -31,7 +35,16 @@ class GpsService : Service() {
             if(locationResult != null && locationResult.lastLocation != null){
                 var latitude = locationResult.lastLocation.latitude
                 var longitude = locationResult.lastLocation.longitude
-                Log.d("LOCATION_UPDATE", "위도: $latitude, 경도: $longitude")
+
+
+                var obj = HashMap<String, LatLng>()
+                obj.put("pickup_gps", LatLng(latitude,longitude))
+
+                fbFirestore.collection("order_gps_tracking_document")
+                    .document("order_id")
+                    .set(obj)
+
+                //Log.d("LOCATION_UPDATE", "위도: $latitude, 경도: $longitude")
             }
 
         }
@@ -43,6 +56,9 @@ class GpsService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        fbFirestore = FirebaseFirestore.getInstance()
+
+
         Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show()
 
         if(intent != null){

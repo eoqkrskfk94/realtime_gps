@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1057710268090",
+    "firebase_url": "https://locationtracking-b0d33.firebaseio.com",
+    "project_id": "locationtracking-b0d33",
+    "storage_bucket": "locationtracking-b0d33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057710268090:android:7b9de4a57176a8b2c92c83",
+        "android_client_info": {
+          "package_name": "com.example.realtime_gps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057710268090-b6mr7dfjtqu85enf0tpdkma2bofrst9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxz_SfYo4zCMZ8YJCgDZr2PPwVXGrpC2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057710268090-b6mr7dfjtqu85enf0tpdkma2bofrst9e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

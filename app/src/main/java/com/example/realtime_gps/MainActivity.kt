@@ -1,46 +1,47 @@
 
 package com.example.realtime_gps
 
-import android.Manifest
-import android.app.ActivityManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.*
 import com.google.android.libraries.maps.model.LatLng
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_FINE_LOCATION = 1000
-    private val NOTIFICATION_ID = 1001
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    //private lateinit var locationCallback: MyLocationCallBack
-
-    private lateinit var notificationManager: NotificationManagerCompat
-
+    private lateinit var fbFirestore: FirebaseFirestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        fbFirestore = FirebaseFirestore.getInstance()
+
+        val fb = fbFirestore.collection("order_gps_tracking_document").document("order_id")
+        fb.addSnapshotListener { value, error ->
+            if(error != null){
+                Log.w("GPS", "Listen failed.", error)
+                return@addSnapshotListener
+            }
+            if (value != null && value.exists()) {
+                Log.d("GPS", "Current data: ${value.data}")
+            } else {
+                Log.d("GPS", "Current data: null")
+            }
+        }
+
+
         getPermission()
-        //locationInit()
 
         val btnStart: Button = findViewById(R.id.btn_start)
         val btnStop: Button = findViewById(R.id.btn_stop)
@@ -64,14 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    private fun isLocationServiceRunning(){
-//        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-//        if(activityManager != null){
-//            for (service in activityManager.getRunningServices(Int.MAX_VALUE)){
-//                if(LocationService.class)
-//            }
-//        }
-//    }
+
 
     private fun startLocationService(){
         val intent = Intent(applicationContext, GpsService::class.java)
@@ -91,48 +85,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-//    fun locationInit(){
-//        fusedLocationProviderClient = FusedLocationProviderClient(this)
-//
-//        locationRequest = LocationRequest()
-//
-//        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-//        locationRequest.interval = 5000
-//        locationRequest.fastestInterval = 1000
-//
-//        locationCallback = MyLocationCallBack()
-//
-//    }
-//
-//    fun addLocationListener(){
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED) {
-//            return
-//        }
-//        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
-//    }
-//
-//    inner class MyLocationCallBack: LocationCallback(){
-//        override fun onLocationResult(locationResult: LocationResult?) {
-//            super.onLocationResult(locationResult)
-//
-//            val location = locationResult?.lastLocation
-//
-//            location?.run{
-//                val latLng = LatLng(latitude, longitude)
-//
-//                Log.d("MainActivity", "위도: $latitude, 경도: $longitude")
-//            }
-//        }
-//
-//    }
-
     override fun onResume() {
         super.onResume()
-        //addLocationListener()
     }
 
 
