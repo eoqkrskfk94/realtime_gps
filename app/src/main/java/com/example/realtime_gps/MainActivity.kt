@@ -49,10 +49,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
-
-
         btnStart.setOnClickListener {
             startLocationService()
         }
