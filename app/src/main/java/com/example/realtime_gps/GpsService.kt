@@ -55,7 +55,9 @@ class GpsService : Service() {
 
                 fbFirestore.collection(currentDate)
                     .document("crew_id")
-                    .set(locationItem)
+                    .collection(currentDateTime)
+                    .document("gps")
+                    .set(LatLng(latitude,longitude))
 
                 //Log.d("LOCATION_UPDATE", "위도: $latitude, 경도: $longitude")
             }
