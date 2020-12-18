@@ -22,6 +22,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.libraries.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.UnsupportedOperationException
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class GpsService : Service() {
@@ -36,13 +38,24 @@ class GpsService : Service() {
                 var latitude = locationResult.lastLocation.latitude
                 var longitude = locationResult.lastLocation.longitude
 
+                val df = java.text.SimpleDateFormat("hh:mm:ss")
+                val df2 = java.text.SimpleDateFormat("yyyy-MM-dd")
+                val currentDateTime = df.format(Date())
+                val currentDate = df2.format(Date())
+
+
+
+
+
 
                 var obj = HashMap<String, LatLng>()
                 obj.put("pickup_gps", LatLng(latitude,longitude))
 
-                fbFirestore.collection("order_gps_tracking_document")
-                    .document("order_id")
-                    .set(obj)
+                val locationItem = LocationItem(LatLng(latitude,longitude),currentDateTime)
+
+                fbFirestore.collection(currentDate)
+                    .document("crew_id")
+                    .set(locationItem)
 
                 //Log.d("LOCATION_UPDATE", "위도: $latitude, 경도: $longitude")
             }
